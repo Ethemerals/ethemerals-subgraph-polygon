@@ -1,0 +1,65 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MeralManager
+    network: matic
+    source:
+      address: "0x4aA85B6F9f1a0c08c7CDAEa7712272B76C0E599b"
+      abi: MeralManager
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - AuthChange
+        - ChangeCMID
+        - ChangeELF
+        - ChangeElement
+        - ChangeHP
+        - ChangeMax
+        - ChangeStats
+        - ChangeXP
+        - ContractRegistered
+        - InitMeral
+        - MeralOwnerChange
+        - MeralStatusChange
+        - Transfer
+      abis:
+        - name: MeralManager
+          file: ./abis/MeralManager.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: AuthChange(address,uint256,bool)
+          handler: handleAuthChange
+        - event: ChangeCMID(uint256,uint32)
+          handler: handleChangeCMID
+        - event: ChangeELF(uint256,uint32,bool)
+          handler: handleChangeELF
+        - event: ChangeElement(uint256,uint8)
+          handler: handleChangeElement
+        - event: ChangeHP(uint256,uint16,bool)
+          handler: handleChangeHP
+        - event: ChangeMax(uint256,uint16,uint16)
+          handler: handleChangeMax
+        - event: ChangeStats(uint256,uint16,uint16,uint16)
+          handler: handleChangeStats
+        - event: ChangeXP(uint256,uint32,bool)
+          handler: handleChangeXP
+        - event: ContractRegistered(address,uint256)
+          handler: handleContractRegistered
+        - event: InitMeral(uint256,uint256,uint32,uint32,uint16,uint16,uint16,uint16,uint8,uint8,address)
+          handler: handleInitMeral
+        - event: MeralOwnerChange(uint256,address)
+          handler: handleMeralOwnerChange
+        - event: MeralStatusChange(uint256,uint8)
+          handler: handleMeralStatusChange
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
