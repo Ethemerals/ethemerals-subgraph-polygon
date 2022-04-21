@@ -1,6 +1,223 @@
-type ExampleEntity @entity {
-  id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  approved: Bytes! # address
+##############################
+##   MAIN ENTITIES          ##
+##############################
+type ERC721Contract @entity {
+	id: ID!
+	address: String!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	type: BigInt!
+	baseURI: String
+	name: String
+}
+
+type Operator @entity {
+	id: ID!
+	address: String!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	approved: Boolean!
+	owner: Account!
+}
+
+type Meral @entity {
+	id: ID!
+	tokenId: BigInt!
+	meralId: BigInt!
+	type: BigInt!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	creator: Account!
+	owner: Account!
+	verifiedOwner: Account!
+	previousOwner: Account!
+	hp: BigInt!
+	maxHp: BigInt!
+	elf: BigInt!
+	xp: BigInt!
+	#STATS
+	atk: BigInt!
+	def: BigInt!
+	spd: BigInt!
+	maxStamina: BigInt!
+	#METADATA
+	cmId: BigInt!
+	coin: String!
+	name: String!
+	artist: String
+	element: BigInt!
+	mainclass: BigInt!
+	subclass: BigInt!
+	hair: String
+	eyes: String
+	skin: String
+	costume: String
+	#EXTRA
+	scorecard: Scorecard!
+	actions: [MeralAction!] @derivedFrom(field: "meral")
+	#
+	burnt: Boolean!
+	status: BigInt!
+	proxy: Boolean!
+}
+
+type Scorecard @entity {
+	id: ID!
+	meral: Meral!
+	highestScore: BigInt!
+	highestRewards: BigInt!
+	battles: BigInt!
+	wins: BigInt!
+	revived: BigInt!
+	reviver: BigInt!
+	resurrected: BigInt!
+	reaped: BigInt!
+	reaper: BigInt!
+	drained: BigInt!
+}
+
+type Account @entity {
+	id: ID!
+	elfBalance: BigInt!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	allowDelegates: Boolean!
+	operators: [Operator!] @derivedFrom(field: "owner")
+	merals: [Meral!] @derivedFrom(field: "owner")
+	created: [Meral!] @derivedFrom(field: "creator")
+	pets: [Pet!] @derivedFrom(field: "owner")
+	createdPets: [Pet!] @derivedFrom(field: "creator")
+	actions: [AccountAction!] @derivedFrom(field: "account")
+}
+
+##############################
+##         Actions          ##
+##############################
+type MeralAction @entity {
+	id: ID!
+	meral: Meral!
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: ActionType!
+	description: String
+}
+
+type AccountAction @entity {
+	id: ID!
+	account: Account!
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: ActionType!
+	description: String
+}
+
+##############################
+##         EQUIPABLES       ##
+##############################
+
+type Pet @entity {
+	id: ID!
+	tokenId: BigInt!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	creator: Account!
+	owner: Account!
+	previousOwner: Account!
+	baseId: BigInt!
+	edition: BigInt
+	atk: BigInt!
+	def: BigInt!
+	spd: BigInt!
+	rarity: BigInt!
+	name: String!
+	metadata: PetMetadata!
+}
+
+type PetMetadata @entity {
+	id: ID!
+	pets: [Pet!] @derivedFrom(field: "metadata")
+	editionCount: BigInt!
+}
+
+type PetAction @entity {
+	id: ID!
+	pet: Pet!
+	timestamp: BigInt!
+	transaction: Transaction!
+	type: ActionType!
+}
+
+##############################
+##      Eternal Battle      ##
+##############################
+type EBStakeActive @entity {
+	id: ID!
+	active: Boolean!
+	timestamp: BigInt!
+	meral: Meral!
+	owner: Account!
+	priceFeedId: BigInt!
+	positionSize: BigInt!
+	startingPrice: BigInt!
+	long: Boolean!
+}
+
+type EBStakeRecord @entity {
+	id: ID!
+	startTime: BigInt!
+	endTime: BigInt!
+	meral: Meral!
+	owner: Account!
+	priceFeedId: BigInt!
+	positionSize: BigInt!
+	startingPrice: BigInt!
+	long: Boolean!
+	# result
+	hp: BigInt!
+	elf: BigInt!
+	revived: Boolean!
+	reviver: Meral
+}
+
+##############################
+##         Wilds            ##
+##############################
+
+##############################
+##         Enums            ##
+##############################
+
+enum ActionType {
+	Default
+	Minted
+	Burnt
+	Transfer
+	SendELF
+	ReceiveELF
+	Send
+	Receive
+	Staked
+	Unstaked
+	Revived
+	Reviver
+	Reaped
+	Reaper
+	RedeemELF
+	RedeemPet
+	RedeemHonor
+	Resurrection
+	DelegateChange
+}
+
+##############################
+##         Low Level        ##
+##############################
+
+type Transaction @entity {
+	id: ID!
+	from: Bytes!
+	to: Bytes
+	value: BigInt!
+	timestamp: BigInt!
+	block: BigInt!
 }
