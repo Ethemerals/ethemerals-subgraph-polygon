@@ -198,6 +198,7 @@ export function handleInitMeral(event: InitMeral): void {
 	token.status = ONE_BI;
 	token.creator = creator.id;
 	token.owner = creator.id;
+	token.verifiedOwner = creator.id;
 	token.type = event.params.meralType;
 
 	token.hp = BigInt.fromI32(event.params.hp);

@@ -61,6 +61,7 @@ export function handleStakeCreated(event: StakeCreated): void {
 	let meralScorecard = ensureScorecard(meral.id);
 
 	stake.active = true;
+	stake.timestamp = event.block.timestamp;
 	stake.meral = meral.id;
 	stake.owner = account.id;
 	stake.priceFeedId = event.params.priceFeedId;

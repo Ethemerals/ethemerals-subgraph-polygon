@@ -70,9 +70,9 @@ dataSources:
     name: EternalBattle
     network: matic
     source:
-      address: '0xa9cf9e6daa70274ad3976c9a87bf8e80a4c4e8c6'
+      address: '0x8ff56822dd0c291941aa3c1461752d96e690bd95'
       abi: EternalBattle
-      startBlock: 27391320
+      startBlock: 27665565
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
