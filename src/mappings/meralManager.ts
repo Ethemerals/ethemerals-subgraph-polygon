@@ -58,8 +58,12 @@ export function handleApproval(event: Approval): void {
 	// - contract.typeCounter(...)
 }
 
-export function handleMeralOwnerChange(event: MeralOwnerChange): void {}
-
+export function handleMeralOwnerChange(event: MeralOwnerChange): void {
+	let token = ensureMeral(event, event.params.id);
+	let account = ensureAccount(event, addressId(event.params.newOwner));
+	token.verifiedOwner = account.id;
+	token.save();
+}
 export function handleApprovalForAll(event: ApprovalForAll): void {}
 
 export function handleAuthChange(event: AuthChange): void {}
